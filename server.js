@@ -60,7 +60,6 @@ app.post('/tasks', (req, res) => {
       res.status(500).json({ error: 'Failed to create a new task' });
     });
 });
-
 app.put('/tasks/:id', (req, res) => {
   const { id } = req.params;
   const { completed } = req.body;
