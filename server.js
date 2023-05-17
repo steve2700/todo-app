@@ -61,7 +61,6 @@ app.post('/tasks', (req, res) => {
     });
 });
 
-// Update the status of a task
 app.put('/tasks/:id', (req, res) => {
   const { id } = req.params;
   const { completed } = req.body;
@@ -70,4 +69,11 @@ app.put('/tasks/:id', (req, res) => {
     .then((task) => {
       if (!task) {
         return res.status(404).json({ error: 'Task not found' });
+      }
+      res.json(task);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Failed to update the task' });
+    });
+}); // Add the missing closing curly brace here
 
