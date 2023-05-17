@@ -44,4 +44,50 @@ app.get('/tasks', (req, res) => {
       res.status(500).json({ error: 'Failed to retrieve tasks' });
     });
 });
+// Add a new task
+app.post('/tasks', (req, res) => {
+  const { title } = req.body;
+  const newTask = new Task({ title });
+
+  newTask.save()
+    .then((task) => {
+      res.status(201).json(task);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Failed to create a new task' });
+    });
+});
+
+// Update the status of a task
+app.put('/tasks/:id', (req, res) => {
+  const { id } = req.params;
+  const { completed } = req.body;
+
+  Task.findByIdAndUpdate(id, { completed }, { new: true })
+    .then((task) => {
+      if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+      }
+      res.json(task);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Failed to update task status' });
+    });
+});
+
+// Delete a task
+app.delete('/tasks/:id', (req, res) => {
+  const { id } = req.params;
+
+  Task.findByIdAndRemove(id)
+    .then((task) => {
+      if (!task) {
+        return res.status(404).json({ error: 'Task not found' });
+      }
+      res.json({ message: 'Task deleted successfully' });
+    })
+    .catch((error) => {
+      res.status(500).json({ error: 'Failed to delete task' });
+    });
+});
 
