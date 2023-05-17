@@ -1,8 +1,9 @@
+
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = 3002;
 
-app.use(express.json()); // Add this line before defining API endpoints
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -69,27 +70,4 @@ app.put('/tasks/:id', (req, res) => {
     .then((task) => {
       if (!task) {
         return res.status(404).json({ error: 'Task not found' });
-      }
-      res.json(task);
-    })
-    .catch((error) => {
-      res.status(500).json({ error: 'Failed to update task status' });
-    });
-});
-
-// Delete a task
-app.delete('/tasks/:id', (req, res) => {
-  const { id } = req.params;
-
-  Task.findByIdAndRemove(id)
-    .then((task) => {
-      if (!task) {
-        return res.status(404).json({ error: 'Task not found' });
-      }
-      res.json({ message: 'Task deleted successfully' });
-    })
-    .catch((error) => {
-      res.status(500).json({ error: 'Failed to delete task' });
-    });
-});
 
