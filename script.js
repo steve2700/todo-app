@@ -1,26 +1,69 @@
-// Assuming you have a form with an input field for the task title
-const form = document.querySelector('form');
+const form = document.getElementById("form");
+const input = document.getElementById("input");
+const todosUL = document.getElementById("todos");
 
-form.addEventListener('submit', (event) => {
-  event.preventDefault();
-  
-  const title = form.elements.title.value;
-  
-  fetch('/tasks', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ title }),
-  })
-    .then((response) => response.json())
-    .then((task) => {
-      // Handle the response or update the UI
-      console.log('New task created:', task);
-    })
-    .catch((error) => {
-      // Handle the error
-      console.error('Error creating task:', error);
+const todos = JSON.parse(localStorage.getItem("todos"));
+
+if (todos) {
+    todos.forEach((todo) => {
+        addTodo(todo);
     });
+}
+
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    addTodo();
 });
 
+function addTodo(todo) {
+    let todoText = input.value;
+
+    if (todo) {
+        todoText = todo.text;
+    }
+
+    if (todoText) {
+        const todoEl = document.createElement("li");
+        if (todo && todo.completed) {
+            todoEl.classList.add("completed");
+        }
+
+        todoEl.innerText = todoText;
+
+        todoEl.addEventListener("click", () => {
+            todoEl.classList.toggle("completed");
+
+            updateLS();
+        });
+
+        todoEl.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+
+            todoEl.remove();
+
+            updateLS();
+        });
+
+        todosUL.appendChild(todoEl);
+
+        input.value = "";
+
+        updateLS();
+    }
+}
+
+function updateLS() {
+    const todosEl = document.querySelectorAll("li");
+
+    const todos = [];
+
+    todosEl.forEach((todoEl) => {
+        todos.push({
+            text: todoEl.innerText,
+            completed: todoEl.classList.contains("completed"),
+        });
+    });
+
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
