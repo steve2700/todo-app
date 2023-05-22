@@ -82,4 +82,38 @@ function clearLocalStorage() {
     localStorage.removeItem("todos");
     todosUL.innerHTML = "";
 }
+const filterSelect = document.getElementById("filterSelect");
+
+filterSelect.addEventListener("change", filterTodos);
+function filterTodos() {
+  const selectedValue = filterSelect.value;
+  const todos = document.querySelectorAll("li");
+
+  todos.forEach((todo) => {
+    if (selectedValue === "all") {
+      // Show all todos
+      todo.style.display = "block";
+    } else if (selectedValue === "completed") {
+      // Show only completed todos
+      if (todo.classList.contains("completed")) {
+        todo.style.display = "block";
+      } else {
+        todo.style.display = "none";
+      }
+    } else if (selectedValue === "not-completed") {
+      // Show only not completed todos
+      if (!todo.classList.contains("completed")) {
+        todo.style.display = "block";
+      } else {
+        todo.style.display = "none";
+      }
+    }
+  });
+}
+// After adding or removing todos
+addTodo();
+// Or
+updateLS();
+// Call filterTodos to update the displayed todos
+filterTodos();
 
