@@ -116,4 +116,53 @@ addTodo();
 updateLS();
 // Call filterTodos to update the displayed todos
 filterTodos();
+const todosUL = document.getElementById("todos");
+
+// Add event listener to the todos list
+todosUL.addEventListener("dblclick", handleTodoEdit);
+
+function handleTodoEdit(event) {
+  const todoItem = event.target.closest("li");
+  const todoTextElement = todoItem.querySelector(".todo-text");
+  
+  // Enable editing mode by adding an input field
+  const inputElement = document.createElement("input");
+  inputElement.type = "text";
+  inputElement.value = todoTextElement.textContent;
+  
+  inputElement.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      finishEditingTodoItem(todoItem, inputElement);
+    }
+  });
+  
+  // Replace the todo text element with the input field
+  todoItem.replaceChild(inputElement, todoTextElement);
+  
+  inputElement.focus();
+}
+
+function finishEditingTodoItem(todoItem, inputElement) {
+  const newTodoText = inputElement.value;
+  
+  // Create a new span element to replace the input field
+  const todoTextElement = document.createElement("span");
+  todoTextElement.classList.add("todo-text");
+  todoTextElement.textContent = newTodoText;
+  
+  // Replace the input field with the todo text element
+  todoItem.replaceChild(todoTextElement, inputElement);
+  
+  updateTodoTextInLocalStorage(todoItem, newTodoText);
+}
+
+function updateTodoTextInLocalStorage(todoItem, newText) {
+  const todos = JSON.parse(localStorage.getItem("todos"));
+  
+  const todoIndex = Array.from(todosUL.children).indexOf(todoItem);
+  if (todoIndex !== -1) {
+    todos[todoIndex].text = newText;
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }
+}
 
