@@ -180,18 +180,34 @@ todosUL.addEventListener("contextmenu", (e) => {
         }
     }
 });
-// Add event listener for edit buttons or double-click functionality
-todosUL.addEventListener("click", (e) => {
-    if (e.target.classList.contains("edit-button")) {
-        const todoItem = e.target.parentElement;
-        const todoText = todoItem.querySelector(".todo-text").innerText;
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-        const newText = prompt("Edit Todo:", todoText);
-
-        if (newText) {
-            todoItem.querySelector(".todo-text").innerText = newText;
-            updateLS();
-        }
-    }
+    addTodo();
 });
+function updateLocalStorage() {
+    const todosEl = document.querySelectorAll("li");
+
+    const todos = Array.from(todosEl).map(todoEl => {
+        return {
+            text: todoEl.innerText,
+            completed: todoEl.classList.contains("completed")
+        };
+    });
+
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+const todos = JSON.parse(localStorage.getItem("todos"));
+
+if (todos) {
+    todos.forEach(todo => {
+        addTodo(todo);
+    });
+}
+function addTodo() {
+    // ... code to add a new Todo item ...
+
+    // Call updateLocalStorage() to update the local storage
+    updateLocalStorage();
+}
 
