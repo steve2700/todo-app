@@ -165,4 +165,19 @@ function updateTodoTextInLocalStorage(todoItem, newText) {
     localStorage.setItem("todos", JSON.stringify(todos));
   }
 }
+todosUL.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
+
+    const todoItem = e.target.closest("li");
+
+    if (todoItem) {
+        const todoText = todoItem.querySelector(".todo-text").textContent;
+        const confirmDelete = confirm(`Are you sure you want to delete "${todoText}"?`);
+
+        if (confirmDelete) {
+            todoItem.remove();
+            updateLS();
+        }
+    }
+});
 
