@@ -204,10 +204,35 @@ if (todos) {
         addTodo(todo);
     });
 }
-function addTodo() {
-    // ... code to add a new Todo item ...
+form.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-    // Call updateLocalStorage() to update the local storage
-    updateLocalStorage();
+    addTodo();
+});
+function addTodo(todo) {
+    // ...
+
+    if (todoText) {
+        // ...
+
+        todoEl.addEventListener("click", () => {
+            todoEl.classList.toggle("completed");
+
+            updateLocalStorage();
+        });
+
+        todoEl.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+
+            todoEl.remove();
+
+            updateLocalStorage();
+        });
+
+        // ...
+
+        updateLocalStorage();
+    }
 }
+
 
