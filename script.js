@@ -18,10 +18,16 @@ form.addEventListener("submit", (e) => {
 
 function addTodo() {
     let todoText = input.value;
+    let priority = document.getElementById("priorityInput").value;
 
     if (todoText) {
         const todoEl = document.createElement("li");
         todoEl.innerText = todoText;
+
+        const priorityEl = document.createElement("span");
+        priorityEl.classList.add("priority");
+        priorityEl.innerText = priority;
+        todoEl.appendChild(priorityEl);
 
         todoEl.addEventListener("click", () => {
             todoEl.classList.toggle("completed");
@@ -37,6 +43,7 @@ function addTodo() {
         todosUL.appendChild(todoEl);
 
         input.value = "";
+        document.getElementById("priorityInput").value = "";
 
         updateLS();
     }
@@ -44,12 +51,18 @@ function addTodo() {
 
 function updateLS() {
     const todosEl = document.querySelectorAll("li");
+
     const todos = [];
 
     todosEl.forEach((todoEl) => {
+        const todoText = todoEl.innerText;
+        const priority = todoEl.querySelector(".priority").innerText;
+        const completed = todoEl.classList.contains("completed");
+
         todos.push({
-            text: todoEl.innerText,
-            completed: todoEl.classList.contains("completed"),
+            text: todoText,
+            priority: priority,
+            completed: completed,
         });
     });
 
@@ -65,6 +78,7 @@ function clearLocalStorage() {
 }
 
 const filterSelect = document.getElementById("filterSelect");
+
 filterSelect.addEventListener("change", filterTodos);
 
 function filterTodos() {
@@ -73,17 +87,14 @@ function filterTodos() {
 
     todos.forEach((todo) => {
         if (selectedValue === "all") {
-            // Show all todos
             todo.style.display = "block";
         } else if (selectedValue === "completed") {
-            // Show only completed todos
             if (todo.classList.contains("completed")) {
                 todo.style.display = "block";
             } else {
                 todo.style.display = "none";
             }
         } else if (selectedValue === "not-completed") {
-            // Show only not completed todos
             if (!todo.classList.contains("completed")) {
                 todo.style.display = "block";
             } else {
@@ -92,4 +103,44 @@ function filterTodos() {
         }
     });
 }
+
+addTodo();
+updateLS();
+filterTodos();
+
+const todosUL = document.getElementById("todos");
+
+todosUL.addEventListener("dblclick", handleTodoEdit);
+
+function handleTodoEdit(event) {
+    const todoItem = event.target.closest("li");
+    const todoTextElement = todoItem.querySelector(".todo-text");
+
+    const inputElement = document.createElement("input");
+    inputElement.type = "text";
+    inputElement.value = todoTextElement.textContent;
+
+    inputElement.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            finishEditingTodoItem(todoItem, inputElement);
+        }
+    });
+
+    todoItem.replaceChild(inputElement, todoTextElement);
+
+    inputElement.focus();
+}
+
+function finishEditingTodoItem(todoItem, inputElement) {
+    const newTodoText = inputElement.value;
+
+    const todoTextElement = document.createElement("span");
+    todoTextElement.classList.add("todo-text");
+    todoTextElement.textContent = newTodoText;
+
+    todoItem.replaceChild(todoTextElement, inputElement);
+}
+
+
+~
 
