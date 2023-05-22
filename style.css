@@ -64,4 +64,20 @@ small {
     color: #b5b5b5;
     margin-top: 3rem;
     text-align: center;
+
 }
+/* Add styles for the clear button */
+#clearButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+#clearButton:hover {
+    background-color: #0056b3;
+}
+
