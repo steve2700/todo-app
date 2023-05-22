@@ -180,4 +180,18 @@ todosUL.addEventListener("contextmenu", (e) => {
         }
     }
 });
+// Add event listener for edit buttons or double-click functionality
+todosUL.addEventListener("click", (e) => {
+    if (e.target.classList.contains("edit-button")) {
+        const todoItem = e.target.parentElement;
+        const todoText = todoItem.querySelector(".todo-text").innerText;
+
+        const newText = prompt("Edit Todo:", todoText);
+
+        if (newText) {
+            todoItem.querySelector(".todo-text").innerText = newText;
+            updateLS();
+        }
+    }
+});
 
