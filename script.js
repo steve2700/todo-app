@@ -66,4 +66,20 @@ function updateLS() {
     });
 
     localStorage.setItem("todos", JSON.stringify(todos));
+
 }
+function addTodo() {
+    // Retrieve the values of priority and due date
+    let priority = document.getElementById("priorityInput").value;
+    let dueDate = document.getElementById("dueDateInput").value;
+
+    // Rest of the code...
+}
+const clearButton = document.getElementById("clearButton");
+clearButton.addEventListener("click", clearLocalStorage);
+
+function clearLocalStorage() {
+    localStorage.removeItem("todos");
+    todosUL.innerHTML = "";
+}
+
