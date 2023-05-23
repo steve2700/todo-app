@@ -1,107 +1,84 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
-
-* {
-    box-sizing: border-box;
-}
-
 body {
-    background-color: #f5f5f5;
-    color: #444;
-    font-family: "Poppins", sans-serif;
-    margin: 0;
-    padding: 1rem;
+  margin: 0;
+  padding: 0;
 }
 
-h1 {
-    color: rgb(179, 131, 226);
-    font-size: 3rem;
-    text-align: center;
-    opacity: 0.8;
-    margin-bottom: 2rem;
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
-form {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
-    width: 400px;
-    margin: 0 auto;
+.profile-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.input {
-    border: none;
-    color: #444;
-    font-size: 1.6rem;
-    padding: 1rem;
-    display: block;
-    width: 100%;
-    margin-bottom: 1rem;
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  margin-right: 20px;
 }
 
-.input::placeholder {
-    color: #d5d5d5;
+.username-input {
+  font-size: 20px;
+  padding: 5px;
+  margin-bottom: 10px;
 }
 
-.todos {
-    background-color: #fff;
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    margin-top: 2rem;
+.todo-section {
+  width: 100%;
 }
 
-.todos li {
-    border-top: 1px solid #e5e5e5;
-    cursor: pointer;
-    font-size: 1.8rem;
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.todo-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.todos li.completed {
-    color: #b6b6b6;
-    text-decoration: line-through;
+.todo-item input[type="checkbox"] {
+  margin-right: 10px;
 }
 
-.small-info {
-    color: #b5b5b5;
-    margin-top: 2rem;
-    text-align: center;
+.completed {
+  text-decoration: line-through;
 }
 
-#filterSelect {
-    font-size: 1.6rem;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    width: 100%;
+.filter-section {
+  margin-top: 20px;
 }
 
-#clearButton {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1.4rem;
-    cursor: pointer;
-    margin-top: 1rem;
-    width: 100%;
+.clear-button {
+  margin-top: 10px;
 }
 
-#clearButton:hover {
-    background-color: #0056b3;
+.add-todo-form {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.edit-button {
-    background-color: blue;
-    color: white;
+.add-todo-form input[type="text"] {
+  flex: 1;
+  font-size: 16px;
+  padding: 5px;
+  margin-right: 10px;
 }
 
-
-
-@media screen and (max-width: 600px) {
-    form {
-        width: 100%;
-    }
+.add-todo-form select {
+  font-size: 16px;
+  padding: 5px;
+  margin-right: 10px;
 }
+
+.add-todo-form button {
+  font-size: 16px;
+  padding: 5px 10px;
+}
+
 
