@@ -1,31 +1,42 @@
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 const priorityInput = document.getElementById("priorityInput");
-const dueDateInput = document.getElementById("dueDateInput");
 const todosUL = document.getElementById("todos");
-const clearButton = document.getElementById("clearButton");
+const usernameSpan = document.querySelector(".username");
+const statusSpan = document.querySelector(".status");
 
-let todos = JSON.parse(localStorage.getItem("todos")) || [];
+// User profile details
+let userProfile = {
+    username: "John Doe",
+    status: "Online"
+};
 
+// Update user profile details
+function updateUserProfile() {
+    usernameSpan.textContent = userProfile.username;
+    statusSpan.textContent = userProfile.status;
+}
+
+// Update user status
+function updateUserStatus(newStatus) {
+    userProfile.status = newStatus;
+    updateUserProfile();
+}
+
+// Event listener for form submission
 form.addEventListener("submit", (e) => {
     e.preventDefault();
     addTodo();
 });
 
-clearButton.addEventListener("click", () => {
-    todos = [];
-    saveTodosToLocalStorage();
-    renderTodos();
-});
-
+// Function to add a new todo
 function addTodo() {
     const todoText = input.value.trim();
     const priority = priorityInput.value.trim();
-    const dueDate = dueDateInput.value.trim();
 
     if (todoText) {
-        const duplicateTodo = todos.find((todo) =>
-            todo.text.toLowerCase() === todoText.toLowerCase()
+        const duplicateTodo = todos.find(
+            (todo) => todo.text.toLowerCase() === todoText.toLowerCase()
         );
 
         if (duplicateTodo) {
@@ -36,7 +47,6 @@ function addTodo() {
         const todo = {
             text: todoText,
             priority: priority || "N/A",
-            dueDate: dueDate || "N/A",
             completed: false,
         };
 
@@ -47,75 +57,52 @@ function addTodo() {
 
         input.value = "";
         priorityInput.value = "";
-        dueDateInput.value = "";
     }
 }
 
+// Function to render the todos
 function renderTodos() {
     todosUL.innerHTML = "";
 
     todos.forEach((todo, index) => {
         const todoEl = document.createElement("li");
-        const todoText = document.createElement("span");
-        const priorityText = document.createElement("span");
-        const dueDateText = document.createElement("span");
-        const editButton = document.createElement("button");
-
-        todoText.textContent = todo.text;
-        priorityText.textContent = `Priority: ${todo.priority}`;
-        dueDateText.textContent = `Due Date: ${todo.dueDate}`;
-        editButton.textContent = "Edit";
-
-        todoEl.appendChild(todoText);
-        todoEl.appendChild(priorityText);
-        todoEl.appendChild(dueDateText);
-        todoEl.appendChild(editButton);
+        todoEl.innerHTML = `
+            <span class="todo-text">${todo.text}</span>
+            <span class="priority">Priority: ${todo.priority}</span>
+            <button class="edit-button">Edit</button>
+        `;
 
         if (todo.completed) {
             todoEl.classList.add("completed");
         }
 
-        todoText.addEventListener("click", () => {
-            toggleTodoComplete(index);
+        todoEl.addEventListener("click", () => {
+            todo.completed = !todo.completed;
+            saveTodosToLocalStorage();
+            renderTodos();
         });
 
-        todoText.addEventListener("contextmenu", (e) => {
+        todoEl.addEventListener("contextmenu", (e) => {
             e.preventDefault();
-            deleteTodo(index);
-        });
-
-        editButton.addEventListener("click", () => {
-            editTodoText(index);
+            todos.splice(index, 1);
+            saveTodosToLocalStorage();
+            renderTodos();
         });
 
         todosUL.appendChild(todoEl);
     });
 }
 
-function toggleTodoComplete(index) {
-    todos[index].completed = !todos[index].completed;
-    saveTodosToLocalStorage();
-    renderTodos();
-}
-
-function deleteTodo(index) {
-    todos.splice(index, 1);
-    saveTodosToLocalStorage();
-    renderTodos();
-}
-
-function editTodoText(index) {
-    const newTodoText = prompt("Enter the new todo text:");
-    if (newTodoText) {
-        todos[index].text = newTodoText.trim();
-        saveTodosToLocalStorage();
-        renderTodos();
-    }
-}
-
+// Function to save todos to local storage
 function saveTodosToLocalStorage() {
     localStorage.setItem("todos", JSON.stringify(todos));
 }
 
-renderTodos();
+// Initialize user profile details
+updateUserProfile();
+
+// Example usage: Update user status
+setTimeout(() => {
+    updateUserStatus("Offline");
+}, 5000);
 
