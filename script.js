@@ -18,8 +18,8 @@ function addTodo(event) {
     event.preventDefault();
 
     const todoText = input.value.trim();
-    const priority = priorityInput.value.trim();
-    const dueDate = dueDateInput.value.trim();
+    const priorityText = priorityInput.value.trim();
+    const dueDateText = dueDateInput.value.trim();
 
     if (todoText === "") {
         return;
@@ -28,61 +28,34 @@ function addTodo(event) {
     const todo = {
         id: Date.now(),
         text: todoText,
-        priority: priority,
-        dueDate: dueDate,
+        priority: priorityText,
+        dueDate: dueDateText,
         completed: false,
     };
 
     todoList.push(todo);
-    saveTodoList();
+
+    displayTodoList();
 
     input.value = "";
     priorityInput.value = "";
     dueDateInput.value = "";
-
-    renderTodoList();
 }
 
-function toggleComplete(todoId) {
-    const todo = todoList.find((todo) => todo.id === todoId);
-    if (todo) {
-        todo.completed = !todo.completed;
-        saveTodoList();
-        renderTodoList();
-    }
-}
-
-function deleteTodo(todoId) {
-    const todoIndex = todoList.findIndex((todo) => todo.id === todoId);
-    if (todoIndex > -1) {
-        todoList.splice(todoIndex, 1);
-        saveTodoList();
-        renderTodoList();
-    }
-}
-
-function clearAll() {
-    todoList = [];
-    saveTodoList();
-    renderTodoList();
-}
-
-function saveTodoList() {
-    localStorage.setItem("todoList", JSON.stringify(todoList));
-}
-
-function loadTodoList() {
-    const storedTodoList = localStorage.getItem("todoList");
-    if (storedTodoList) {
-        todoList = JSON.parse(storedTodoList);
-        renderTodoList();
-    }
-}
-
-function renderTodoList() {
+function displayTodoList() {
     todos.innerHTML = "";
 
-    const filteredTodos = filterTodos();
+    const filter = filterSelect.value;
+
+    const filteredTodos = todoList.filter((todo) => {
+        if (filter === "completed") {
+            return todo.completed;
+        } else if (filter === "not-completed") {
+            return !todo.completed;
+        } else {
+            return true;
+        }
+    });
 
     filteredTodos.forEach((todo) => {
         const todoItem = document.createElement("li");
@@ -94,36 +67,61 @@ function renderTodoList() {
         const todoText = document.createElement("span");
         todoText.classList.add("todo-text");
         todoText.innerText = todo.text;
-        todoText.addEventListener("click", () => toggleComplete(todo.id));
+
+        const todoPriority = document.createElement("span");
+        todoPriority.classList.add("todo-priority");
+        todoPriority.innerText = todo.priority;
+
+        const todoDueDate = document.createElement("span");
+        todoDueDate.classList.add("todo-duedate");
+        todoDueDate.innerText = todo.dueDate;
 
         const todoActions = document.createElement("div");
         todoActions.classList.add("todo-actions");
 
-        const deleteButton = document.createElement("button");
-        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            deleteTodo(todo.id);
-        });
+        const completeButton = document.createElement("button");
+        completeButton.innerHTML = "&#10003;";
+        completeButton.setAttribute("aria-label", "Complete");
+        completeButton.addEventListener("click", () => completeTodoItem(todo.id));
 
+        const deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "&#128465;";
+        deleteButton.setAttribute("aria-label", "Delete");
+        deleteButton.addEventListener("click", () => deleteTodoItem(todo.id));
+
+        todoActions.appendChild(completeButton);
         todoActions.appendChild(deleteButton);
 
         todoItem.appendChild(todoText);
+        todoItem.appendChild(todoPriority);
+        todoItem.appendChild(todoDueDate);
         todoItem.appendChild(todoActions);
 
         todos.appendChild(todoItem);
     });
 }
 
-function filterTodos() {
-    const filterValue = filterSelect.value;
-    if (filterValue === "completed") {
-        return todoList.filter((todo) => todo.completed);
-    } else if (filterValue === "not-completed") {
-        return todoList.filter((todo) => !todo.completed);
-    } else {
-        return todoList;
+function completeTodoItem(todoId) {
+    const todoIndex = todoList.findIndex((todo) => todo.id === todoId);
+
+    if (todoIndex !== -1) {
+        todoList[todoIndex].completed = !todoList[todoIndex].completed;
+        displayTodoList();
     }
+}
+
+function deleteTodoItem(todoId) {
+    const todoIndex = todoList.findIndex((todo) => todo.id === todoId);
+
+    if (todoIndex !== -1) {
+        todoList.splice(todoIndex, 1);
+        displayTodoList();
+    }
+}
+
+function clearAll() {
+    todoList = [];
+    displayTodoList();
 }
 
 function saveProfile(event) {

@@ -3,47 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDo App</title>
     <link rel="stylesheet" href="style.css">
+    <title>Todo App</title>
 </head>
 <body>
-    <h1>todos</h1>
-    <div class="user-profile">
-        <div class="profile-picture" id="profilePicture"></div>
-        <div class="user-details">
-            <span class="username" id="username"></span>
-            <span class="status">Online</span>
-        </div>
-    </div>
-
-    <form id="form">
-        <input type="text" id="input" class="input" placeholder="Enter your todo" autocomplete="off">
-        <input type="text" id="priorityInput" class="input" placeholder="Priority" autocomplete="off">
-        <input type="date" id="dueDateInput" class="input" placeholder="Due Date" autocomplete="off">
-        <button id="addButton">Add Todo</button>
+    <div class="container">
+        <h1>Todo App</h1>
+        <form id="form">
+            <input type="text" id="input" placeholder="Enter a todo...">
+            <input type="text" id="priorityInput" placeholder="Priority">
+            <input type="date" id="dueDateInput">
+            <button id="addButton">Add Todo</button>
+        </form>
         <select id="filterSelect">
             <option value="all">All</option>
             <option value="completed">Completed</option>
             <option value="not-completed">Not Completed</option>
         </select>
         <button id="clearButton">Clear All</button>
-    </form>
-    <ul class="todos" id="todos"></ul>
-    <small>
-        Left-click to toggle complete.<br>
-        Right-click to delete the todo.
-    </small>
-
-    <div class="edit-profile">
+        <ul id="todos"></ul>
         <h2>Edit Profile</h2>
-        <label for="profilePictureInput">Profile Picture:</label>
-        <input type="file" id="profilePictureInput">
-        <label for="usernameInput">Username:</label>
-        <input type="text" id="usernameInput" placeholder="Enter your username">
-        <button id="saveProfileButton">Save</button>
+        <div class="profile">
+            <input type="file" id="profilePictureInput">
+            <input type="text" id="usernameInput" placeholder="Enter your username">
+            <button id="saveProfileButton">Save</button>
+            <div id="profileDetails">
+                <div id="profilePicture"></div>
+                <span id="username"></span>
+            </div>
+        </div>
     </div>
-
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
 
