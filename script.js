@@ -3,7 +3,7 @@ const input = document.getElementById("input");
 const priorityInput = document.getElementById("priorityInput");
 const todosUL = document.getElementById("todos");
 
-const todos = JSON.parse(localStorage.getItem("todos")) || [];
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
 form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -45,7 +45,18 @@ function addTodo() {
 function renderTodos() {
     todosUL.innerHTML = "";
 
-    todos.forEach((todo, index) => {
+    const filterSelect = document.getElementById("filterSelect");
+    const filterOption = filterSelect.value;
+
+    let filteredTodos = todos;
+
+    if (filterOption === "completed") {
+        filteredTodos = todos.filter((todo) => todo.completed);
+    } else if (filterOption === "not-completed") {
+        filteredTodos = todos.filter((todo) => !todo.completed);
+    }
+
+    filteredTodos.forEach((todo, index) => {
         const todoEl = document.createElement("li");
         todoEl.innerHTML = `
             <span class="todo-text">${todo.text}</span>
@@ -65,7 +76,7 @@ function renderTodos() {
 
         todoEl.addEventListener("contextmenu", (e) => {
             e.preventDefault();
-            todos.splice(index, 1);
+            todos = todos.filter((_, i) => i !== index);
             saveTodosToLocalStorage();
             renderTodos();
         });

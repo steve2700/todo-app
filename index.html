@@ -1,51 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>ToDo App</title>
-        <link rel="stylesheet" href="style.css" />
-	<link rel="icon" href="favicon.png" type="image/png">
-
-        <script src="script.js" defer></script>
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+</head>
+<body>
     <h1>todos</h1>
     <form id="form">
-        <input
-            type="text"
-            id="input"
-            class="input"
-            placeholder="Enter your todo"
-            autocomplete="off"
-        />
-        <!-- Add the filtering or sorting options above the Todo list -->
+        <input type="text" id="input" class="input" placeholder="Enter your todo" autocomplete="off">
+        <input type="text" id="priorityInput" class="input" placeholder="Priority" autocomplete="off">
+        <input type="date" id="dueDateInput" class="input" placeholder="Due Date" autocomplete="off">
+        <button id="addButton">Add Todo</button>
         <select id="filterSelect">
             <option value="all">All</option>
             <option value="completed">Completed</option>
             <option value="not-completed">Not Completed</option>
         </select>
-
-        <ul class="todos" id="todos">
-            <li>
-                <span class="todo-text">Todo 1</span>
-                <button class="edit-button">Edit</button>
-            </li>
-            <li>
-                <span class="todo-text">Todo 2</span>
-                <button class="edit-button">Edit</button>
-            </li>
-            <!-- Add more Todo items here -->
-        </ul>
-
-        <input type="text" id="priorityInput" class="input" placeholder="Priority" autocomplete="off" />
-        <input type="date" id="dueDateInput" class="input" placeholder="Due Date" autocomplete="off" />
         <button id="clearButton">Clear All</button>
     </form>
+    <ul class="todos" id="todos"></ul>
     <small>
-        Left click to toggle complete. <br />
-        Right click to delete the todo.
+        Left-click to toggle complete.<br>
+        Right-click to delete the todo.
     </small>
-</body>
 
+    <script src="script.js" defer></script>
+</body>
+</html>
 
