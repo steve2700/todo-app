@@ -1,19 +1,51 @@
-body {
-  margin: 0;
-  padding: 0;
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600&display=swap");
+
+* {
+  box-sizing: border-box;
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
+body {
+  background-color: #f5f5f5;
+  color: #444;
+  font-family: "Poppins", sans-serif;
+  margin: 0;
+  padding: 1rem;
+}
+
+h1 {
+  color: rgb(179, 131, 226);
+  font-size: 3rem;
+  text-align: center;
+  opacity: 0.8;
+  margin-bottom: 2rem;
+}
+
+form {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+  width: 400px;
+  margin: 0 auto;
+}
+
+.input {
+  border: none;
+  color: #444;
+  font-size: 1.6rem;
+  padding: 1rem;
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.input::placeholder {
+  color: #d5d5d5;
 }
 
 .profile-section {
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .profile-picture {
@@ -25,60 +57,70 @@ body {
   margin-right: 20px;
 }
 
-.username-input {
-  font-size: 20px;
-  padding: 5px;
-  margin-bottom: 10px;
+.username {
+  font-size: 2rem;
+  font-weight: bold;
 }
 
-.todo-section {
-  width: 100%;
+.todos {
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  margin-top: 2rem;
 }
 
-.todo-item {
+.todos li {
+  border-top: 1px solid #e5e5e5;
+  cursor: pointer;
+  font-size: 1.8rem;
+  padding: 1rem;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
-.todo-item input[type="checkbox"] {
-  margin-right: 10px;
-}
-
-.completed {
+.todos li.completed {
+  color: #b6b6b6;
   text-decoration: line-through;
 }
 
-.filter-section {
-  margin-top: 20px;
+.small-info {
+  color: #b5b5b5;
+  margin-top: 2rem;
+  text-align: center;
 }
 
-.clear-button {
-  margin-top: 10px;
+#filterSelect {
+  font-size: 1.6rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  width: 100%;
 }
 
-.add-todo-form {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+#clearButton {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  width: 100%;
 }
 
-.add-todo-form input[type="text"] {
-  flex: 1;
-  font-size: 16px;
-  padding: 5px;
-  margin-right: 10px;
+#clearButton:hover {
+  background-color: #0056b3;
 }
 
-.add-todo-form select {
-  font-size: 16px;
-  padding: 5px;
-  margin-right: 10px;
+.edit-button {
+  background-color: blue;
+  color: white;
 }
 
-.add-todo-form button {
-  font-size: 16px;
-  padding: 5px 10px;
+@media screen and (max-width: 600px) {
+  form {
+    width: 100%;
+  }
 }
-
 
