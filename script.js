@@ -1,182 +1,170 @@
-// Retrieve saved todos from local storage
-const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+let todos = [];
 
-// Retrieve saved profile from local storage
-const savedProfile = JSON.parse(localStorage.getItem("profile")) || {};
-
-// DOM elements
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 const priorityInput = document.getElementById("priorityInput");
 const dueDateInput = document.getElementById("dueDateInput");
-const addButton = document.getElementById("addButton");
-const filterSelect = document.getElementById("filterSelect");
 const todosList = document.getElementById("todos");
+const filterSelect = document.getElementById("filterSelect");
 const clearButton = document.getElementById("clearButton");
 const profilePicture = document.getElementById("profilePicture");
-const profilePictureInput = document.getElementById("profilePictureInput");
-const usernameInput = document.getElementById("usernameInput");
-const saveProfileButton = document.getElementById("saveProfileButton");
+const username = document.getElementById("username");
 
-// Initialize todos array
-let todos = savedTodos;
+// Load profile and todos from local storage
+loadData();
 
-// Initialize profile
-let profile = savedProfile;
+// Render profile and todos
+renderProfile();
+renderTodos();
 
-// Function to save todos to local storage
-const saveTodos = () => {
-  localStorage.setItem("todos", JSON.stringify(todos));
-};
+// Event listener for form submission
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  addTodo();
+});
 
-// Function to save profile to local storage
-const saveProfile = () => {
-  localStorage.setItem("profile", JSON.stringify(profile));
-};
+// Event listener for filter select
+filterSelect.addEventListener("change", function () {
+  renderTodos();
+});
 
-// Function to create a new todo object
-const createTodo = (text, priority, dueDate) => {
-  return {
-    text: text,
-    priority: priority,
-    dueDate: dueDate,
-    completed: false,
-    id: Date.now().toString(),
-  };
-};
+// Event listener for clear button
+clearButton.addEventListener("click", function () {
+  clearTodos();
+});
+
+// Event listener for profile picture edit
+const editProfileButton = document.getElementById("editProfileButton");
+editProfileButton.addEventListener("click", function () {
+  const newProfilePicture = prompt("Enter the URL of your new profile picture:");
+  if (newProfilePicture) {
+    updateProfilePicture(newProfilePicture);
+  }
+});
 
 // Function to add a new todo
-const addTodo = (event) => {
-  event.preventDefault();
+function addTodo() {
   const todoText = input.value.trim();
-  const todoPriority = priorityInput.value.trim();
-  const todoDueDate = dueDateInputHere's the continuation of the JavaScript code:
-
-```javascript
-  .value;
+  const priority = priorityInput.value.trim();
+  const dueDate = dueDateInput.value;
 
   if (todoText !== "") {
-    const newTodo = createTodo(todoText, todoPriority, todoDueDate);
-    todos.push(newTodo);
-    saveTodos();
+    const todo = {
+      id: new Date().getTime(),
+      text: todoText,
+      priority: priority,
+      dueDate: dueDate,
+      completed: false,
+   };
+
+    todos.push(todo);
+    saveData();
+    renderTodos();
+
     input.value = "";
     priorityInput.value = "";
     dueDateInput.value = "";
-    renderTodos();
+    input.focus();
   }
-};
+}
 
-// Function to clear all todos
-const clearTodos = () => {
-  todos = [];
-  saveTodos();
-  renderTodos();
-};
+// Function to render profile
+function renderProfile() {
+  const storedProfilePicture = localStorage.getItem("profilePicture");
+  const storedUsername = localStorage.getItem("username");
 
-// Function to toggle the completed status of a todo
-const toggleTodo = (id) => {
-  todos = todos.map((todo) => {
-    if (todo.id === id) {
-      return { ...todo, completed: !todo.completed };
+  if (storedProfilePicture) {
+    profilePicture.style.backgroundImage = `url('${storedProfilePicture}')`;
+  }
+
+  if (storedUsername) {
+    username.textContent = storedUsername;
+  }
+}
+
+// Function to update profile picture
+function updateProfilePicture(newProfilePicture) {
+  profilePicture.style.backgroundImage = `url('${newProfilePicture}')`;
+  localStorage.setItem("profilePicture", newProfilePicture);
+}
+
+// Function to save todos to local storage
+function saveData() {
+  localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+// Function to load todos from local storage
+function loadData() {
+  const storedTodos = localStorage.getItem("todos");
+  if (storedTodos) {
+    todos = JSON.parse(storedTodos);
+  }
+}
+
+// Function to render todos
+function renderTodos() {
+  todosList.innerHTML = "";
+
+  const filteredTodos = filterSelect.value === "all"
+    ? todos
+    : filterSelect.value === "completed"
+      ? todos.filter(todo => todo.completed)
+      : todos.filter(todo => !todo.completed);
+
+  filteredTodos.forEach(todo => {
+    const todoElement = document.createElement("li");
+    todoElement.classList.add("todo");
+    if (todo.completed) {
+      todoElement.classList.add("complete");
+    }
+
+    todoElement.innerHTML = `
+      <span>${todo.text} - Priority: ${todo.priority} - Due Date: ${todo.dueDate}</span>
+      <div class="todo-actions">
+        <button class="delete-button" onclick="deleteTodo(${todo.id})">&#10006;</button>
+      </div>
+    `;
+
+    todoElement.addEventListener("click", function () {
+      toggleTodoComplete(todo.id);
+    });
+
+    todoElement.addEventListener("contextmenu", function (event) {
+      event.preventDefault();
+      deleteTodo(todo.id);
+    });
+
+    todosList.appendChild(todoElement);
+  });
+}
+
+// Function to toggle todo completion status
+function toggleTodoComplete(todoId) {
+  todos = todos.map(todo => {
+    if (todo.id === todoId) {
+      return {
+        ...todo,
+        completed: !todo.completed
+      };
     }
     return todo;
   });
-  saveTodos();
+
+  saveData();
   renderTodos();
-};
+}
 
 // Function to delete a todo
-const deleteTodo = (id) => {
-  todos = todos.filter((todo) => todo.id !== id);
-  saveTodos();
+function deleteTodo(todoId) {
+  todos = todos.filter(todo => todo.id !== todoId);
+  saveData();
   renderTodos();
-};
+}
 
-// Function to render the todos
-const renderTodos = () => {
-  const filter = filterSelect.value;
-  const filteredTodos = filterTodos(todos, filter);
-  todosList.innerHTML = "";
-
-  filteredTodos.forEach((todo) => {
-    const todoItem = document.createElement("div");
-    todoItem.classList.add("todo-item");
-
-    const todoCheckbox = document.createElement("input");
-    todoCheckbox.type = "checkbox";
-    todoCheckbox.checked = todo.completed;
-    todoCheckbox.addEventListener("change", () => toggleTodo(todo.id));
-    todoItem.appendChild(todoCheckbox);
-
-    const todoText = document.createElement("span");
-    todoText.innerText = todo.text;
-    todoText.classList.add(todo.completed ? "completed" : "");
-    todoItem.appendChild(todoText);
-
-    const todoPriority = document.createElement("span");
-    todoPriority.innerText = todo.priority;
-    todoItem.appendChild(todoPriority);
-
-    const todoDueDate = document.createElement("span");
-    todoDueDate.innerText = todo.dueDate;
-    todoItem.appendChild(todoDueDate);
-
-    const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.addEventListener("click", () => deleteTodo(todo.id));
-    todoItem.appendChild(deleteButton);
-
-    todosList.appendChild(todoItem);
-  });
-};
-
-// Function to filter todos based on the selected filter option
-const filterTodos = (todos, filter) => {
-  switch (filter) {
-    case "completed":
-      return todos.filter((todo) => todo.completed);
-    case "not-completed":
-      return todos.filter((todo) => !todo.completed);
-    default:
-      return todos;
-  }
-};
-
-// Event listeners
-form.addEventListener("submit", addTodo);
-clearButton.addEventListener("click", clearTodos);
-filterSelect.addEventListener("change", renderTodos);
-profilePictureInput.addEventListener("change", (event) => {
-  const file = event.target.files[0];
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    profile.profilePicture = e.target.result;
-    saveProfile();
-    renderProfile();
-  };
-  reader.readAsDataURL(file);
-});
-usernameInput.addEventListener("input", () => {
-  profile.username = usernameInput.value;
-  saveProfile();
-});
-saveProfileButton.addEventListener("click", () => {
-  profile.username = usernameInput.value;
-  saveProfile();
-  renderProfile();
-});
-
-// Function to render the profile picture and username
-const renderProfile = () => {
-  if (profile.profilePicture) {
-    profilePicture.style.backgroundImage = `url(${profile.profilePicture})`;
-  } else {
-    profilePicture.style.backgroundImage = "none";
-  }
-  usernameInput.value = profile.username || "";
-};
-
-// Initial rendering of todos and profile
-renderTodos();
-renderProfile();
+// Function to clear all todos
+function clearTodos() {
+  todos = [];
+  saveData();
+  renderTodos();
+}
 

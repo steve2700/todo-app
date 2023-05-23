@@ -41,16 +41,15 @@ form {
   color: #d5d5d5;
 }
 
-.profile-section {
+.user-profile {
   display: flex;
   align-items: center;
-  justify-content: center;
   margin-bottom: 2rem;
 }
 
 .profile-picture {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-size: cover;
   background-position: center;
@@ -62,65 +61,91 @@ form {
   font-weight: bold;
 }
 
-.todos {
-  background-color: #fff;
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-  margin-top: 2rem;
-}
-
-.todos li {
-  border-top: 1px solid #e5e5e5;
-  cursor: pointer;
-  font-size: 1.8rem;
-  padding: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.todos li.completed {
-  color: #b6b6b6;
-  text-decoration: line-through;
-}
-
-.small-info {
-  color: #b5b5b5;
-  margin-top: 2rem;
-  text-align: center;
-}
-
-#filterSelect {
-  font-size: 1.6rem;
-  padding: 0.5rem;
-  margin-bottom: 1rem;
-  width: 100%;
-}
-
-#clearButton {
+#editProfileButton {
   background-color: #007bff;
   color: #fff;
   border: none;
   padding: 0.5rem 1rem;
   font-size: 1.4rem;
   cursor: pointer;
-  margin-top: 1rem;
-  width: 100%;
 }
 
-#clearButton:hover {
+#editProfileButton:hover {
   background-color: #0056b3;
 }
 
-.edit-button {
-  background-color: blue;
-  color: white;
+#addButton {
+  background-color: rgb(179, 131, 226);
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 1rem;
 }
 
-@media screen and (max-width: 600px) {
-  form {
-    width: 100%;
-  }
+#addButton:hover {
+  background-color: rgb(146, 93, 195);
+}
+
+#clearButton {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 1rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+#clearButton:hover {
+  background-color: #b02a37;
+}
+
+.todos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.todo.complete {
+  background-color: rgba(0, 0, 0, 0.05);
+  text-decoration: line-through;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.todo.complete .todo-actions {
+  display: none;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #b02a37;
 }
 
