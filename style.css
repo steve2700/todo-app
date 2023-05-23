@@ -41,111 +41,149 @@ form {
   color: #d5d5d5;
 }
 
-.user-profile {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2rem;
-}
-
-.profile-picture {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background-size: cover;
-  background-position: center;
-  margin-right: 20px;
-}
-
-.username {
-  font-size: 2rem;
-  font-weight: bold;
-}
-
-#editProfileButton {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 0.5rem 1rem;
-  font-size: 1.4rem;
-  cursor: pointer;
-}
-
-#editProfileButton:hover {
-  background-color: #0056b3;
-}
-
-#addButton {
+button {
   background-color: rgb(179, 131, 226);
-  color: #fff;
   border: none;
-  padding: 1rem;
-  font-size: 1.6rem;
+  color: #fff;
   cursor: pointer;
+  font-size: 1.6rem;
+  padding: 1rem;
+  display: block;
+  width: 100%;
+}
+
+select {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  color: #444;
+  font-size: 1.6rem;
+  padding: 1rem;
+  display: block;
   width: 100%;
   margin-bottom: 1rem;
-}
-
-#addButton:hover {
-  background-color: rgb(146, 93, 195);
-}
-
-#clearButton {
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 1rem;
-  font-size: 1.6rem;
-  cursor: pointer;
-  width: 100%;
-  margin-bottom: 1rem;
-}
-
-#clearButton:hover {
-  background-color: #b02a37;
 }
 
 .todos {
   list-style: none;
-  padding: 0;
   margin: 0;
+  padding: 0;
 }
 
-.todo {
+.todos li {
   background-color: #fff;
   border-radius: 5px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  margin-bottom: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
 }
 
-.todo.complete {
-  background-color: rgba(0, 0, 0, 0.05);
+.todos li:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.todos li.completed {
+  background-color: #f0f0f0;
   text-decoration: line-through;
-  color: rgba(0, 0, 0, 0.5);
 }
 
-.todo.complete .todo-actions {
-  display: none;
+.todos li .todo-text {
+  flex: 1;
 }
 
-.todo-actions {
-  display: flex;
-  gap: 0.5rem;
+.todos li .todo-actions {
+  margin-left: 1rem;
 }
 
-.delete-button {
-  background-color: #dc3545;
-  color: #fff;
+.todos li .todo-actions button {
+  background-color: transparent;
   border: none;
-  padding: 0.5rem;
-  font-size: 1.4rem;
+  color: rgb(179, 131, 226);
   cursor: pointer;
+  font-size: 1.4rem;
+  margin-left: 1rem;
 }
 
-.delete-button:hover {
-  background-color: #b02a37;
+.todos li .todo-actions button:hover {
+  text-decoration: underline;
+}
+
+.todos small {
+  color: #aaa;
+  font-size: 1.2rem;
+}
+
+.user-profile {
+  align-items: center;
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.profile-picture {
+  background-color: rgb(179, 131, 226);
+  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
+}
+
+.user-details {
+  margin-left: 1rem;
+}
+
+.username {
+  color: rgb(179, 131, 226);
+  font-size: 1.8rem;
+}
+
+.status {
+  color: #aaa;
+}
+
+.edit-profile {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  padding: 2rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.edit-profile h2 {
+  color: rgb(179, 131, 226);
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.edit-profile label {
+  display: block;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.edit-profile input[type="file"] {
+  margin-bottom: 1rem;
+}
+
+.edit-profile input[type="text"] {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 0.5rem;
+  width: 100%;
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+.edit-profile button {
+  background-color: rgb(179, 131, 226);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.6rem;
+  padding: 1rem;
+  display: block;
+  width: 100%;
 }
 
