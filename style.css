@@ -92,10 +92,11 @@ form {
     background-color: #0056b3;
 }
 
-.edit-button {
+.Edit {
     background-color: blue;
     color: white;
 }
+
 
 @media screen and (max-width: 600px) {
     form {
