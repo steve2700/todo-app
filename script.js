@@ -1,108 +1,124 @@
+// Retrieve saved todos from local storage
+const savedTodos = JSON.parse(localStorage.getItem("todos")) || [];
+
+// DOM elements
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 const priorityInput = document.getElementById("priorityInput");
-const todosUL = document.getElementById("todos");
-const usernameSpan = document.querySelector(".username");
-const statusSpan = document.querySelector(".status");
+const dueDateInput = document.getElementById("dueDateInput");
+const addButton = document.getElementById("addButton");
+const filterSelect = document.getElementById("filterSelect");
+const todosList = document.getElementById("todos");
 
-// User profile details
-let userProfile = {
-    username: "John Doe",
-    status: "Online"
-};
-
-// Update user profile details
-function updateUserProfile() {
-    usernameSpan.textContent = userProfile.username;
-    statusSpan.textContent = userProfile.status;
-}
-
-// Update user status
-function updateUserStatus(newStatus) {
-    userProfile.status = newStatus;
-    updateUserProfile();
-}
-
-// Event listener for form submission
-form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    addTodo();
-});
-
-// Function to add a new todo
-function addTodo() {
-    const todoText = input.value.trim();
-    const priority = priorityInput.value.trim();
-
-    if (todoText) {
-        const duplicateTodo = todos.find(
-            (todo) => todo.text.toLowerCase() === todoText.toLowerCase()
-        );
-
-        if (duplicateTodo) {
-            alert("This task already exists!");
-            return;
-        }
-
-        const todo = {
-            text: todoText,
-            priority: priority || "N/A",
-            completed: false,
-        };
-
-        todos.push(todo);
-
-        saveTodosToLocalStorage();
-        renderTodos();
-
-        input.value = "";
-        priorityInput.value = "";
-    }
-}
-
-// Function to render the todos
-function renderTodos() {
-    todosUL.innerHTML = "";
-
-    todos.forEach((todo, index) => {
-        const todoEl = document.createElement("li");
-        todoEl.innerHTML = `
-            <span class="todo-text">${todo.text}</span>
-            <span class="priority">Priority: ${todo.priority}</span>
-            <button class="edit-button">Edit</button>
-        `;
-
-        if (todo.completed) {
-            todoEl.classList.add("completed");
-        }
-
-        todoEl.addEventListener("click", () => {
-            todo.completed = !todo.completed;
-            saveTodosToLocalStorage();
-            renderTodos();
-        });
-
-        todoEl.addEventListener("contextmenu", (e) => {
-            e.preventDefault();
-            todos.splice(index, 1);
-            saveTodosToLocalStorage();
-            renderTodos();
-        });
-
-        todosUL.appendChild(todoEl);
-    });
-}
+// Initialize todos array
+let todos = savedTodos;
 
 // Function to save todos to local storage
-function saveTodosToLocalStorage() {
-    localStorage.setItem("todos", JSON.stringify(todos));
-}
+const saveTodos = () => {
+  localStorage.setItem("todos", JSON.stringify(todos));
+};
 
-// Initialize user profile details
-updateUserProfile();
+// Function to create a new todo object
+const createTodo = (text, priority, dueDate) => {
+  return {
+    text: text,
+    priority: priority,
+    dueDate: dueDate,
+    completed: false,
+    id: Date.now().toString(),
+  };
+};
 
-// Example usage: Update user status
-setTimeout(() => {
-    updateUserStatus("Offline");
-}, 5000);
+// Function to add a new todo
+const addTodo = (event) => {
+  event.preventDefault();
+  const todoText = input.value.trim();
+  const todoPriority = priorityInput.value.trim();
+  const todoDueDate = dueDateInput.value;
+  if (todoText !== "") {
+    const newTodo = createTodo(todoText, todoPriority, todoDueDate);
+    todos.push(newTodo);
+    saveTodos();
+    input.value = "";
+    priorityInput.value = "";
+    dueDateInput.value = "";
+    renderTodos();
+  }
+};
+
+// Function to toggle a todo's completion status
+const toggleComplete = (id) => {
+  todos = todos.map((todo) => {
+    if (todo.id === id) {
+      return { ...todo, completed: !todo.completed };
+    }
+    return todo;
+  });
+  saveTodos();
+  renderTodos();
+};
+
+// Function to delete a todo
+const deleteTodo = (id) => {
+  todos = todos.filter((todo) => todo.id !== id);
+  saveTodos();
+  renderTodos();
+};
+
+// Function to clear all todos
+const clearTodos = () => {
+  todos = [];
+  saveTodos();
+  renderTodos();
+};
+
+// Function to render todos
+const renderTodos = () => {
+  todosList.innerHTML = "";
+  const filteredTodos = filterTodos();
+  filteredTodos.forEach((todo) => {
+    const todoItem = document.createElement("li");
+    todoItem.classList.add("todo");
+    if (todo.completed) {
+      todoItem.classList.add("completed");
+    }
+    todoItem.innerHTML = `
+      <div class="todo-item">
+        <input type="checkbox" class="checkbox" ${todo.completed ? "checked" : ""}>
+        <div class="todo-text">${todo.text}</div>
+        <div class="todo-priority">${todo.priority}</div>
+        <div class="todo-due-date">${todo.dueDate}</div>
+        <div class="actions">
+          <button class="delete-button">Delete</button>
+        </div>
+      </div>
+    `;
+    const checkbox = todoItem.querySelector(".checkbox");
+    const deleteButton = todoItem.querySelector(".delete-button");
+    checkbox.addEventListener("change", () => toggleComplete(todo.id));
+    deleteButton.addEventListener("click", () => deleteTodo(todo.id));
+    todosList.appendChild(todoItem);
+  });
+};
+
+// Function to filter todos based on the selected filter
+const filterTodos = () => {
+  const selectedFilter = filterSelect.value;
+  switch (selectedFilter) {
+    case "completed":
+      return todos.filter((todo) => todo.completed);
+    case "not-completed":
+      return todos.filter((todo) => !todo.completed);
+    default:
+      return todos;
+  }
+};
+
+// Event listeners
+form.addEventListener("submit", addTodo);
+clearButton.addEventListener("click", clearTodos);
+filterSelect.addEventListener("change", renderTodos);
+
+// Initial rendering of todos
+renderTodos();
 
