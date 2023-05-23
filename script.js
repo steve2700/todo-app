@@ -1,7 +1,9 @@
 const form = document.getElementById("form");
 const input = document.getElementById("input");
 const priorityInput = document.getElementById("priorityInput");
+const dueDateInput = document.getElementById("dueDateInput");
 const todosUL = document.getElementById("todos");
+const clearButton = document.getElementById("clearButton");
 
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
@@ -10,15 +12,20 @@ form.addEventListener("submit", (e) => {
     addTodo();
 });
 
-renderTodos();
+clearButton.addEventListener("click", () => {
+    todos = [];
+    saveTodosToLocalStorage();
+    renderTodos();
+});
 
 function addTodo() {
     const todoText = input.value.trim();
     const priority = priorityInput.value.trim();
+    const dueDate = dueDateInput.value.trim();
 
     if (todoText) {
-        const duplicateTodo = todos.find(
-            (todo) => todo.text.toLowerCase() === todoText.toLowerCase()
+        const duplicateTodo = todos.find((todo) =>
+            todo.text.toLowerCase() === todoText.toLowerCase()
         );
 
         if (duplicateTodo) {
@@ -29,6 +36,7 @@ function addTodo() {
         const todo = {
             text: todoText,
             priority: priority || "N/A",
+            dueDate: dueDate || "N/A",
             completed: false,
         };
 
@@ -39,53 +47,75 @@ function addTodo() {
 
         input.value = "";
         priorityInput.value = "";
+        dueDateInput.value = "";
     }
 }
 
 function renderTodos() {
     todosUL.innerHTML = "";
 
-    const filterSelect = document.getElementById("filterSelect");
-    const filterOption = filterSelect.value;
-
-    let filteredTodos = todos;
-
-    if (filterOption === "completed") {
-        filteredTodos = todos.filter((todo) => todo.completed);
-    } else if (filterOption === "not-completed") {
-        filteredTodos = todos.filter((todo) => !todo.completed);
-    }
-
-    filteredTodos.forEach((todo, index) => {
+    todos.forEach((todo, index) => {
         const todoEl = document.createElement("li");
-        todoEl.innerHTML = `
-            <span class="todo-text">${todo.text}</span>
-            <span class="priority">Priority: ${todo.priority}</span>
-            <button class="edit-button">Edit</button>
-        `;
+        const todoText = document.createElement("span");
+        const priorityText = document.createElement("span");
+        const dueDateText = document.createElement("span");
+        const editButton = document.createElement("button");
+
+        todoText.textContent = todo.text;
+        priorityText.textContent = `Priority: ${todo.priority}`;
+        dueDateText.textContent = `Due Date: ${todo.dueDate}`;
+        editButton.textContent = "Edit";
+
+        todoEl.appendChild(todoText);
+        todoEl.appendChild(priorityText);
+        todoEl.appendChild(dueDateText);
+        todoEl.appendChild(editButton);
 
         if (todo.completed) {
             todoEl.classList.add("completed");
         }
 
-        todoEl.addEventListener("click", () => {
-            todo.completed = !todo.completed;
-            saveTodosToLocalStorage();
-            renderTodos();
+        todoText.addEventListener("click", () => {
+            toggleTodoComplete(index);
         });
 
-        todoEl.addEventListener("contextmenu", (e) => {
+        todoText.addEventListener("contextmenu", (e) => {
             e.preventDefault();
-            todos = todos.filter((_, i) => i !== index);
-            saveTodosToLocalStorage();
-            renderTodos();
+            deleteTodo(index);
+        });
+
+        editButton.addEventListener("click", () => {
+            editTodoText(index);
         });
 
         todosUL.appendChild(todoEl);
     });
 }
 
+function toggleTodoComplete(index) {
+    todos[index].completed = !todos[index].completed;
+    saveTodosToLocalStorage();
+    renderTodos();
+}
+
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    saveTodosToLocalStorage();
+    renderTodos();
+}
+
+function editTodoText(index) {
+    const newTodoText = prompt("Enter the new todo text:");
+    if (newTodoText) {
+        todos[index].text = newTodoText.trim();
+        saveTodosToLocalStorage();
+        renderTodos();
+    }
+}
+
 function saveTodosToLocalStorage() {
     localStorage.setItem("todos", JSON.stringify(todos));
 }
+
+renderTodos();
 
