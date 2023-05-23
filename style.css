@@ -145,11 +145,10 @@ select {
   background-color: #fff;
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
+  margin-top: 2rem;
   padding: 2rem;
   max-width: 400px;
   margin: 0 auto;
-  order: -1;
 }
 
 .edit-profile h2 {
