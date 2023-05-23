@@ -55,7 +55,7 @@ function addTodo() {
       priority: priority,
       dueDate: dueDate,
       completed: false,
-   };
+    };
 
     todos.push(todo);
     saveData();
